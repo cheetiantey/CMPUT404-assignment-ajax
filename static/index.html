@@ -51,7 +51,7 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
                     // console.log(`xhr.reponse is ${xhr.response}`)
                     const new_world = xhr.response
                     // updateWorldWith(xhr.response)
-                    world = {}
+                    // world = {}
                     console.log(`Length of new_world is ${Object.keys(new_world).length}`)
                     for (let key in new_world) {
                         world[key] = new_world[key]

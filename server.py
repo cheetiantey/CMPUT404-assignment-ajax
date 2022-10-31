@@ -90,7 +90,7 @@ def update(entity):
     # print(f"e is {flask.jsonify(e)}")
     # return Response("{'a':'b'}", status=201, mimetype='application/json')
     print(f"e is: {myWorld.space}")
-    return Response(json.dumps(myWorld.space), status=200, mimetype='application/json')
+    return Response(json.dumps(myWorld.space[entity]), status=200, mimetype='application/json')
 
     # return redirect("/static/index.html", code=302)
     # return None
