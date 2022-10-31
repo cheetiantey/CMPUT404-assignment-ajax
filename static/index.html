@@ -78,6 +78,42 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
 }
 
 
+function sendJSONXMLHTTPRequestGET(url, callback) {
+    console.log(`url is ${url}`)
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState==4) {
+            try {
+                if (xhr.status==201) {
+                    const new_world = xhr.response
+                    world = {}
+                    console.log(`Length of new_world is ${Object.keys(new_world).length}`)
+                    for (let key in new_world) {
+                        world[key] = new_world[key]
+                        console.log(key)
+                    }
+                    renderFrame()
+                    console.log(`Length of world is ${Object.keys(world).length}`)
+                    // world["y100"] = {"x": 761, "y": 428, "colour": "purple"}
+                }
+            } 
+            catch(e) {
+                alert('Error: ' + e.name);
+            }
+        }
+    };
+    //XXX: POST to a URL
+    // Referenced from CMPUT404 GitHub page
+    xhr.open('GET', url);
+    //XXX: set the mimetype and the accept headers!
+    // Remember to use application/json !
+    xhr.setRequestHeader("Content-Type", "application/json"); // From MDN
+    xhr.responseType = 'json'; // https://stackoverflow.com/questions/1973140/parsing-json-from-xmlhttprequest-responsejson
+    xhr.send(); // Referenced from CMPUT404 GitHub page
+}
+
+
 world = {};
 
 //XXX: TODO Make this prettier!
@@ -292,7 +328,34 @@ mouse.mousedraggers.push(function(x,y,clicked,e) {
 function update() {
     //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
     drawFrame();
+    checkForUpdate();
 }
+
+// Referenced from CMPUT404 GitHub Page
+function checkForUpdate() { 
+    console.log("Checking for update")
+    const entity_relative_pathname = "/world"
+    sendJSONXMLHTTPRequest(entity_relative_pathname, () => {})
+
+    // jsonReq({
+    //     "url":"http://"+host+"/listener/"+id,
+    //     "method":"GET",
+    //     "success": function(text) {
+    //         if (text) {
+    //             var objs = JSON.parse(text);
+    //             updateWorldWith(objs);
+    //         }
+    //     }
+    // });
+}
+
+// Referenced from CMPUT404 GitHub Page
+function jsonReq( obj ) {
+    obj["content-type"] = "application/json";
+    obj["accept"] = "application/json";
+    return ajaxReq( obj );
+}
+
 
 // Referenced from CMPUT404 GitHub Page
 // function updateWorldWith(objs) {

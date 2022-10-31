@@ -98,7 +98,8 @@ def update(entity):
 @app.route("/world", methods=['POST','GET'])    
 def world():
     '''you should probably return the world here'''
-    return None
+    # return None
+    return Response(json.dumps(myWorld.space), status=201, mimetype='application/json')
 
 @app.route("/entity/<entity>")    
 def get_entity(entity):
