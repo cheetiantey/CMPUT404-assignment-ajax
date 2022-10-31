@@ -33,13 +33,33 @@ var H = canvas.height = window.innerHeight-50;
 
 
 function sendJSONXMLHTTPRequest(url, objects, callback) {
+    console.log(`url is ${url}`)
     var xhr = new XMLHttpRequest();
+    // if (objects["content-type"]) {
+        //     xhr.overrideMimeType(obj["content-type"]);
+        // }
+        // if (objects["accept"]) {
+            //     xhr.setRequestHeader('Accept', objects["accept"]);
+            // }
     xhr.onreadystatechange = function () {
         if (xhr.readyState==4) {
             try {
-                if (xhr.status==200) {
+                if (xhr.status==201) {
                     //XXX: parse some JSON from the request!
                     //XXX: Pass the data to the callback!
+                    // obj["success"]( xhr.responseText );
+                    // console.log(`xhr.reponse is ${xhr.response}`)
+                    const new_world = xhr.response
+                    // updateWorldWith(xhr.response)
+                    world = {}
+                    console.log(`Length of new_world is ${Object.keys(new_world).length}`)
+                    for (let key in new_world) {
+                        world[key] = new_world[key]
+                        console.log(key)
+                    }
+                    renderFrame()
+                    console.log(`Length of world is ${Object.keys(world).length}`)
+                    // world["y100"] = {"x": 761, "y": 428, "colour": "purple"}
                 }
             } 
             catch(e) {
@@ -48,8 +68,13 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
         }
     };
     //XXX: POST to a URL
+    // Referenced from CMPUT404 GitHub page
+    xhr.open('POST', url);
     //XXX: set the mimetype and the accept headers!
     // Remember to use application/json !
+    xhr.setRequestHeader("Content-Type", "application/json"); // From MDN
+    xhr.responseType = 'json'; // https://stackoverflow.com/questions/1973140/parsing-json-from-xmlhttprequest-responsejson
+    xhr.send(objects); // Referenced from CMPUT404 GitHub page
 }
 
 
@@ -138,6 +163,10 @@ function addEntity(entity, data) {
     world[entity] = data;
     drawNextFrame(); // (but should we?)
     //XXX: Send a XHTML Request that updates the entity you just  modified!
+    console.log(`host is ${host}`)
+    const entity_relative_pathname = "/entity/" +  entity
+    console.log(`data is ${JSON.stringify(data)}`)
+    sendJSONXMLHTTPRequest(entity_relative_pathname, JSON.stringify(data), () => {})
 
 }
 
@@ -264,6 +293,30 @@ function update() {
     //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
     drawFrame();
 }
+
+// Referenced from CMPUT404 GitHub Page
+// function updateWorldWith(objs) {
+//         for (var key in objs) {
+//             debug(key);
+//             myWorld[key] = objs[key];
+//         }
+//         drawWorld(myWorld);
+// }
+
+// // Referenced from CMPUT404 GitHub Page
+// function drawWorld(world) {
+//         removeChildren( canvas );
+//         for (var key in world) {
+//             canvas.appendChild( renderEntity(key, world[key] ) );
+//         }
+// }
+
+// // Referenced from CMPUT404 GitHub Page
+// function removeChildren(dom) {
+//         while( dom.firstChild ) {
+//             dom.removeChild( dom.firstChild );
+//         }
+// }
 
 // 30 frames per second
 setInterval( update, 1000/30.0);

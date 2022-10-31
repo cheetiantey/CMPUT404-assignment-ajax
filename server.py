@@ -22,7 +22,7 @@
 
 
 import flask
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, Response
 import json
 app = Flask(__name__)
 app.debug = True
@@ -80,7 +80,20 @@ def hello():
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
     '''update the entities via this interface'''
-    return None
+    # print(request.json)
+    print("one")
+    v = flask_post_json() # Referenced from CMPUT404 GitHub Page
+    print("two")
+    myWorld.set( entity, v )
+    e = myWorld.get(entity)    
+    # return flask.jsonify( e ) 
+    # print(f"e is {flask.jsonify(e)}")
+    # return Response("{'a':'b'}", status=201, mimetype='application/json')
+    print(f"e is: {myWorld.space}")
+    return Response(json.dumps(myWorld.space), status=201, mimetype='application/json')
+
+    # return redirect("/static/index.html", code=302)
+    # return None
 
 @app.route("/world", methods=['POST','GET'])    
 def world():
@@ -90,7 +103,10 @@ def world():
 @app.route("/entity/<entity>")    
 def get_entity(entity):
     '''This is the GET version of the entity interface, return a representation of the entity'''
-    return None
+    # Referenced from CMPUT404 GitHub Page
+    v = myWorld.get(entity)
+    return flask.jsonify(v)
+    # return None
 
 @app.route("/clear", methods=['POST','GET'])
 def clear():
