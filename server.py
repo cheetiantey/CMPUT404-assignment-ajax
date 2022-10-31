@@ -90,7 +90,7 @@ def update(entity):
     # print(f"e is {flask.jsonify(e)}")
     # return Response("{'a':'b'}", status=201, mimetype='application/json')
     print(f"e is: {myWorld.space}")
-    return Response(json.dumps(myWorld.space), status=201, mimetype='application/json')
+    return Response(json.dumps(myWorld.space), status=200, mimetype='application/json')
 
     # return redirect("/static/index.html", code=302)
     # return None
@@ -99,7 +99,7 @@ def update(entity):
 def world():
     '''you should probably return the world here'''
     # return None
-    return Response(json.dumps(myWorld.space), status=201, mimetype='application/json')
+    return Response(json.dumps(myWorld.space), status=200, mimetype='application/json')
 
 @app.route("/entity/<entity>")    
 def get_entity(entity):
@@ -112,7 +112,9 @@ def get_entity(entity):
 @app.route("/clear", methods=['POST','GET'])
 def clear():
     '''Clear the world out!'''
-    return None
+    myWorld.clear()
+    return Response(json.dumps(myWorld.space), status=200, mimetype='application/json')
+    # return None
 
 if __name__ == "__main__":
     app.run()

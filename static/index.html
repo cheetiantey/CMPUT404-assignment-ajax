@@ -44,7 +44,7 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState==4) {
             try {
-                if (xhr.status==201) {
+                if (xhr.status==200) {
                     //XXX: parse some JSON from the request!
                     //XXX: Pass the data to the callback!
                     // obj["success"]( xhr.responseText );
@@ -85,7 +85,7 @@ function sendJSONXMLHTTPRequestGET(url, callback) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState==4) {
             try {
-                if (xhr.status==201) {
+                if (xhr.status==200) {
                     const new_world = xhr.response
                     world = {}
                     console.log(`Length of new_world is ${Object.keys(new_world).length}`)
